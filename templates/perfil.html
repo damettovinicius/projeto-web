@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">Sistema de Gestão</a>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+
+    {# Verifica se o usuário foi encontrado #}
+    {# 'usuario' será None se o nome da URL não existir no dicionário #}
+    {% if usuario %}
+
+      {# Cabeçalho do perfil #}
+      <div class="card">
+        <div class="card-body">
+
+          <h2 class="card-title">{{ usuario.nome }}</h2>
+          {# Acesso a chaves do dicionário usa ponto (.) no Jinja2 — mais limpo que ['chaves'] #}
+
+          <p class="text-muted">{{ usuario.email }}</p>
+
+          {# Badge de nível: cor diferente para cada nível #}
+          {% if usuario.nivel == 'administrador' %}
+            <span class="badge bg-danger">Administrador</span>
+          {% elif usuario.nivel == 'moderador' %}
+            <span class="badge bg-warning text-dark">Moderador</span>
+          {% else %}
+            <span class="badge bg-primary">Usuário</span>
+          {% endif %}
+
+          {# Badge de status: verde se ativo, vermelho se inativo #}
+          {% if usuario.ativo %}
+            <span class="badge bg-success ms-2">Ativo</span>
+          {% else %}
+            <span class="badge bg-secondary ms-2">Inativo</span>
+          {% endif %}
+
+          <hr>
+
+          <p>Total de postagens: <strong>{{ usuario.posts }}</strong></p>
+
+          {# Botão de edição visível apenas para administradores #}
+          {% if usuario.nivel == 'administrador' %}
+            <div class="alert alert-warning">
+              <strong>Painel de Admin:</strong> Você tem acesso total ao sistema.
+            </div>
+            <a href="#" class="btn btn-danger">Gerenciar Sistema</a>
+          {% endif %}
+
+        </div>
+      </div>
+
+    {% else %}
+      {# Exibido quando o usuário não é encontrado #}
+      <div class="alert alert-danger">
+        <h4>Usuário não encontrado</h4>
+        <p>
+          Não existe nenhum usuário com o nome
+          <strong>{{ nome_buscado }}</strong> neste sistema.
+        </p>
+      </div>
+      <a href="/" class="btn btn-secondary">Voltar ao início</a>
+    {% endif %}
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  </script>
+</body>
+</html>
